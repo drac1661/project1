@@ -10,9 +10,18 @@ from datetime import datetime
 import subprocess
 
 
-
-api_key=os.getenv("API_KEY")
+api_key=os.getenv("APIPROXY_TOKEN")
 host=os.getenv("HOST")
+def install_and_run_datagen(email):
+    try:
+        subprocess.run(["pip", "install", "uvicorn"], check=True)
+        subprocess.run(["python", "https://raw.githubusercontent.com/sanand0/tools-in-data-science-public/tds-2025-01/project-1/datagen.py", email], check=True)
+        return f"datagen.py executed with email: {email}"
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"Error executing datagen.py: {e}")
+
+
+
 
 def ask_openai(prompt):
     """Send a question and context to OpenAI API and return the response."""
@@ -261,15 +270,7 @@ def whichday():
     with open(output_file_path, 'w') as output_file:
         output_file.write(str(wednesday_count))
 
-def format_markdown():
-    file_path='data/format.md'
-    if not os.path.isfile(file_path):
-       return f"File not found: {file_path}"
-    try:
-        subprocess.run(['prettier', '--write', file_path], check=True)
-    except subprocess.CalledProcessError as e:
-        return f"Error formatting file: {e}"
-
-
-
-
+def format_file(input_file,output_file):
+            command = ["cmd", "/c", "npx", "prettier@3.4.2", "--write", input_file]
+            print(f"Executing command: {' '.join(command)}")
+            subprocess.run(command, check=True)

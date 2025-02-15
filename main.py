@@ -24,7 +24,7 @@ app = FastAPI()
 
 DATA_DIR = "/data"
 AIPROXY_TOKEN = os.getenv("AIPROXY_TOKEN")
-LLM_API_URL = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions"  # Replace with actual LLM endpoint
+host = os.getenv("HOST")  # Replace with actual LLM endpoint
 
 # Task mapping
 task_mapping = {
@@ -76,7 +76,7 @@ def call_llm(task_description: str) -> dict:
     }
 
     try:
-        response = requests.post(LLM_API_URL, headers=headers, json=payload, timeout=15)
+        response = requests.post(host, headers=headers, json=payload, timeout=15)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
